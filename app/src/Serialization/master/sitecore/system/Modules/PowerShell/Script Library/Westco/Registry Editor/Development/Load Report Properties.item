@@ -1,0 +1,74 @@
+----item----
+version: 1
+id: {E68B3939-84DE-43DA-B211-30A06C3C5724}
+database: master
+path: /sitecore/system/Modules/PowerShell/Script Library/Westco/Registry Editor/Development/Load Report Properties
+parent: {4C1EC1C6-69AB-4431-B8E9-172135A4CC7C}
+name: Load Report Properties
+master: {00000000-0000-0000-0000-000000000000}
+template: {DD22F1B3-BD87-4DB2-9E7D-F7A496888D43}
+templatekey: PowerShell Script
+created: 20181228T221519Z
+
+----field----
+field: {B1A94FF0-6897-47C0-9C51-AA6ACB80B1F0}
+name: Script
+key: script
+content-length: 811
+
+Import-Function -Name Render-ReportField
+
+$editScript = Get-Item -Path "master:" -ID "{3A7D7BF9-0D34-4C6A-BA61-68B184ADD686}"
+$clearScript = Get-Item -Path "master:" -ID "{5A09CD2E-7687-41D4-99D1-7A84D315D37E}"
+$deleteImageSrc = [Sitecore.Resources.Images]::GetThemedImageSource("Office/16x16/delete.png")
+$editImageSrc = [Sitecore.Resources.Images]::GetThemedImageSource("Office/16x16/edit.png")
+
+@{
+    Property = @(
+        @{Label="Edit"; Expression={ Render-ScriptInvoker $editScript @{"key"="$($_.Key)"; "user"="$($_.User.Name)";} "<img src='$($editImageSrc)' />" } },
+        @{Label="Clear"; Expression={ Render-ScriptInvoker $clearScript @{"key"="$($_.Key)"; "user"="$($_.User.Name)";} "<img src='$($deleteImageSrc)' />" } },
+        "Key",
+        "Description",
+        "Value"
+    )
+}
+----version----
+language: en
+version: 1
+revision: d59a974f-86f4-4db9-a4dd-041f9072f6db
+
+----field----
+field: {52807595-0F8F-4B20-8D2A-CB71D28C6103}
+name: __Owner
+key: __owner
+content-length: 14
+
+sitecore\admin
+----field----
+field: {25BED78C-4957-4165-998A-CA1B52F67497}
+name: __Created
+key: __created
+content-length: 16
+
+20181228T221519Z
+----field----
+field: {8CDC337E-A112-42FB-BBB4-4143751E123F}
+name: __Revision
+key: __revision
+content-length: 36
+
+d59a974f-86f4-4db9-a4dd-041f9072f6db
+----field----
+field: {D9CF14B1-FA16-4BA6-9288-E8A174D4D522}
+name: __Updated
+key: __updated
+content-length: 16
+
+20190102T162204Z
+----field----
+field: {BADD9CF9-53E0-4D0C-BCC0-2D784C282F6A}
+name: __Updated by
+key: __updated by
+content-length: 14
+
+sitecore\admin

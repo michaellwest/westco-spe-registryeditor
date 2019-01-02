@@ -14,7 +14,7 @@ created: 20180723T155028Z
 field: {B1A94FF0-6897-47C0-9C51-AA6ACB80B1F0}
 name: Script
 key: script
-content-length: 1435
+content-length: 1236
 
 <#
     .SYNOPSIS
@@ -25,33 +25,38 @@ content-length: 1435
         https://www.skillcore.net/sitecore/sitecore-registry-editor
 #>
 
-Import-Function -Name Render-ReportField
+Import-Function -Name Get-RegistrySetting
 
-# TODO: Provide user selector
-$user = Get-User -Current
-$userPattern = "/$($user.Name)/"
-$data = $user.Profile.SerializedData
-
-$entries = [System.Collections.ArrayList]@()
-foreach($key in $data.keys | Where-Object { $_.StartsWith($userPattern) } | Sort-Object -Property Key) {
-    $entries.Add([PSCustomObject]@{"Key"=$key.Substring($userPattern.Length).Trim();"Value"=$data[$key]}) > $null
-}
-
-$editScript = Get-Item -Path "master:" -ID "{3A7D7BF9-0D34-4C6A-BA61-68B184ADD686}"
-$clearScript = Get-Item -Path "master:" -ID "{5A09CD2E-7687-41D4-99D1-7A84D315D37E}"
-$deleteImageSrc = [Sitecore.Resources.Images]::GetThemedImageSource("Office/16x16/delete.png")
-$editImageSrc = [Sitecore.Resources.Images]::GetThemedImageSource("Office/16x16/edit.png")
+# Documentation : https://doc.sitecorepowershell.com/interfaces/interactive-dialogs
 
 $props = @{
-    Property = @(
-        @{Label="Edit"; Expression={ Render-ScriptInvoker $editScript @{"key"="$($userPattern)$($_.Key)"} "<img src='$($editImageSrc)' />" } },
-        @{Label="Clear"; Expression={ Render-ScriptInvoker $clearScript @{"key"="$($userPattern)$($_.Key)"} "<img src='$($deleteImageSrc)' />" } },
-        "Key",
-        "Value"
+    Parameters = @(
+        @{Name="selectedUsers"; Value=$me; Title="Selected User"; Tooltip="View registry settings for the specified user."; Editor="user"; }
     )
+    Title = "Registry Editor"
+    Description = "Manage registry settings for users."
+    Width = 450
+    Height = 300
+    ShowHints = $true
+    Icon = "OfficeWhite/32x32/user.png"
 }
 
-$entries | Show-ListView -Title "Registry Editor" @props
+$result = Read-Variable @props
+if($result -ne "ok") {
+    Exit
+}
+$user = Get-User -Id $selectedUsers[0]
+$commonProps = Get-Item -Path "master:" -ID "{E68B3939-84DE-43DA-B211-30A06C3C5724}" | Invoke-Script
+$props = @{
+    Title = "Registry Editor"
+    InfoTitle = "Registry items found for the specified user"
+    InfoDescription = "The following items are associated with the user <b>$($user.Name)</b>."
+    PageSize = 25
+}
+$props += $commonProps
+
+Get-RegistrySetting -User $user | Show-ListView @props
+Close-Window
 ----field----
 field: {06D5295C-ED2F-4A54-9BF2-26228D113318}
 name: __Icon
@@ -62,8 +67,15 @@ Office/32x32/edit_user.png
 ----version----
 language: en
 version: 1
-revision: 1a076550-f658-4679-ac7c-239fa7f2e133
+revision: fd30451e-aa9d-44b8-95b3-c83bf061cfe7
 
+----field----
+field: {9541E67D-CE8C-4225-803D-33F7F29F09EF}
+name: __Short description
+key: __short description
+content-length: 35
+
+Manage registry settings for users.
 ----field----
 field: {25BED78C-4957-4165-998A-CA1B52F67497}
 name: __Created
@@ -77,14 +89,14 @@ name: __Revision
 key: __revision
 content-length: 36
 
-1a076550-f658-4679-ac7c-239fa7f2e133
+fd30451e-aa9d-44b8-95b3-c83bf061cfe7
 ----field----
 field: {D9CF14B1-FA16-4BA6-9288-E8A174D4D522}
 name: __Updated
 key: __updated
 content-length: 16
 
-20180723T173342Z
+20190102T210953Z
 ----field----
 field: {BADD9CF9-53E0-4D0C-BCC0-2D784C282F6A}
 name: __Updated by

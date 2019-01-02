@@ -1,0 +1,77 @@
+----item----
+version: 1
+id: {3A7D7BF9-0D34-4C6A-BA61-68B184ADD686}
+database: master
+path: /sitecore/system/Modules/PowerShell/Script Library/Westco/Registry Editor/Development/Edit Settings
+parent: {4C1EC1C6-69AB-4431-B8E9-172135A4CC7C}
+name: Edit Settings
+master: {00000000-0000-0000-0000-000000000000}
+template: {DD22F1B3-BD87-4DB2-9E7D-F7A496888D43}
+templatekey: PowerShell Script
+created: 20180723T155828Z
+
+----field----
+field: {B1A94FF0-6897-47C0-9C51-AA6ACB80B1F0}
+name: Script
+key: script
+content-length: 869
+
+Import-Function -Name Get-RegistrySetting
+Import-Function -Name Set-RegistrySetting
+
+$user = Get-User -Id $user
+$setting = Get-RegistrySetting -User $user -Key $key
+
+$props = @{
+    Parameters = @(
+        @{Name="response"; Value=$setting.Value; Title="What is the new value?"; Tooltip="The raw registry setting value for <b>$($key)</b>."; Lines=4; }
+    )
+    Title = "Edit Setting"
+    Icon = "OfficeWhite/32x32/user.png"
+    Description = "Edit the raw registry value."
+    Width = 450
+    Height = 300
+    ShowHints = $true
+}
+
+$result = Read-Variable @props
+if($result -ne "ok") { exit }
+
+if($response -ne $null) {
+    Set-RegistrySetting -User $user -Key $key -Value $response
+    $props = Get-Item -Path "master:" -ID "{E68B3939-84DE-43DA-B211-30A06C3C5724}" | Invoke-Script
+    Get-RegistrySetting -User $user | Update-ListView @props
+}
+----version----
+language: en
+version: 1
+revision: 9354dcef-313b-4a23-819d-7c809bc0cd00
+
+----field----
+field: {25BED78C-4957-4165-998A-CA1B52F67497}
+name: __Created
+key: __created
+content-length: 16
+
+20180723T155828Z
+----field----
+field: {8CDC337E-A112-42FB-BBB4-4143751E123F}
+name: __Revision
+key: __revision
+content-length: 36
+
+9354dcef-313b-4a23-819d-7c809bc0cd00
+----field----
+field: {D9CF14B1-FA16-4BA6-9288-E8A174D4D522}
+name: __Updated
+key: __updated
+content-length: 16
+
+20190102T164113Z
+----field----
+field: {BADD9CF9-53E0-4D0C-BCC0-2D784C282F6A}
+name: __Updated by
+key: __updated by
+content-length: 14
+
+sitecore\admin

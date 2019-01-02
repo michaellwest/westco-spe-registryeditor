@@ -21,13 +21,13 @@ content-length: 1
 field: {06D5295C-ED2F-4A54-9BF2-26228D113318}
 name: __Icon
 key: __icon
-content-length: 27
+content-length: 32
 
-Software/32x32/jar_bean.png
+Office/32x32/jar_coffee_bean.png
 ----version----
 language: en
 version: 1
-revision: b1c5538e-4a73-477f-a8c9-564b8bd2cdf4
+revision: 92f34818-2c89-4642-b476-1b8e3b8ca8f5
 
 ----field----
 field: {52807595-0F8F-4B20-8D2A-CB71D28C6103}
@@ -49,14 +49,14 @@ name: __Revision
 key: __revision
 content-length: 36
 
-b1c5538e-4a73-477f-a8c9-564b8bd2cdf4
+92f34818-2c89-4642-b476-1b8e3b8ca8f5
 ----field----
 field: {D9CF14B1-FA16-4BA6-9288-E8A174D4D522}
 name: __Updated
 key: __updated
 content-length: 16
 
-20180723T154934Z
+20180925T144535Z
 ----field----
 field: {BADD9CF9-53E0-4D0C-BCC0-2D784C282F6A}
 name: __Updated by
